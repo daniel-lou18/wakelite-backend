@@ -16,6 +16,10 @@ const cardSchema = new mongoose.Schema({
     type: String,
     //   required: [true, "A card must have an url"],
   },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 const Card = mongoose.model("Card", cardSchema);

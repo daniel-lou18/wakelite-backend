@@ -8,6 +8,6 @@ const app = express();
 app.use(cors({ origin: "http://localhost:5173" }));
 app.use(express.json());
 
-app.use("/api/link", cardRouter);
+app.use("/api/cards", cardRouter);
 
 module.exports = app;

@@ -1,6 +1,16 @@
 const { getMetatags } = require("../utils/metatags");
 const Card = require("../models/CardModel");
 
+exports.getAllCards = async (req, res) => {
+  try {
+    const cards = await Card.find();
+    res.status(200).json({ status: "success", payload: cards });
+  } catch (err) {
+    console.error(err);
+    res.status(404).json({ status: "fail", message: "Could not get cards" });
+  }
+};
+
 exports.createCard = async (req, res) => {
   try {
     const { linkUrl } = req.body;
@@ -9,15 +19,14 @@ exports.createCard = async (req, res) => {
 
     res.status(201).json({
       status: "success",
-      message: "Succesfully retrieved website data",
       payload: newCard,
     });
   } catch (err) {
     console.error(err);
     if (err.message.includes("ERR_NAME_NOT_RESOLVED")) {
-      res.status(404).json({
+      res.status(400).json({
         status: "fail",
-        message: "Could not find the website",
+        message: "Invalid url",
       });
     } else {
       res
