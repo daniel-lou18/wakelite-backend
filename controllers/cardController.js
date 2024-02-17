@@ -1,9 +1,13 @@
 const { getMetatags } = require("../utils/metatags");
 const Card = require("../models/CardModel");
+const Collection = require("../models/CollectionModel");
 
 exports.getAllCards = async (req, res) => {
   try {
-    const cards = await Card.find();
+    let filter = {};
+    if (req.params.collectionId)
+      filter = { cardCollection: req.params.collectionId };
+    const cards = await Card.find(filter);
     res.status(200).json({ status: "success", payload: cards });
   } catch (err) {
     console.error(err);
@@ -15,7 +19,14 @@ exports.createCard = async (req, res) => {
   try {
     const { linkUrl } = req.body;
     const data = await getMetatags(linkUrl);
-    const newCard = await Card.create({ ...data, linkUrl });
+    console.log(req.params);
+    const collection = await Collection.findById(req.params.collectionId);
+    console.log(collection);
+    const newCard = await Card.create({
+      ...data,
+      linkUrl,
+      cardCollection: collection.id,
+    });
 
     res.status(201).json({
       status: "success",

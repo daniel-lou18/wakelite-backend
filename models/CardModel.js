@@ -20,6 +20,11 @@ const cardSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  cardCollection: {
+    type: mongoose.Schema.ObjectId,
+    ref: "Card",
+    required: [true, "A card must belong to a Collection"],
+  },
 });
 
 const Card = mongoose.model("Card", cardSchema);
